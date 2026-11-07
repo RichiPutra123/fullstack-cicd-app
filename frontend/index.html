@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikasi Deployment CI/CD Container</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
+    .container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 400px; }
+    input { width: 70%; padding: 8px; margin-right: 5px; }
+    button { padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    ul { list-style: none; padding: 0; margin-top: 20px; }
+    li { background: #e9ecef; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Manager Tugas (CI/CD Demo)</h2>
+    <input type="text" id="itemName" placeholder="Tambah item baru...">
+    <button onclick="addItem()">Tambah</button>
+    <ul id="itemList"></ul>
+  </div>
+
+  <script>
+    const API = '/api/items';
+    async function loadItems() {
+      try {
+        const res = await fetch(API);
+        const data = await res.json();
+        const list = document.getElementById('itemList');
+        list.innerHTML = data.map(item => `<li>${item.name}</li>`).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    async function addItem() {
+      const input = document.getElementById('itemName');
+      if (!input.value) return;
+      await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: input.value })
+      });
+      input.value = '';
+      loadItems();
+    }
+    loadItems();
+  </script>
+</body>
+</html>
