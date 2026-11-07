@@ -16,6 +16,14 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: app_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
   backend:
     build: ./backend
     container_name: app_backend
@@ -23,8 +31,13 @@ services:
       - "5000:5000"
     environment:
       DATABASE_URL: postgres://user:password@db:5432/workorder_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecretkey123
+    volumes:
+      - ./backend/uploads:/app/uploads
     depends_on:
       - db
+      - redis
     networks:
       - app-network
 
