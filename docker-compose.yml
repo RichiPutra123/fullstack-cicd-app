@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: workorder_db
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      DATABASE_URL: postgres://user:password@db:5432/mydb
+      DATABASE_URL: postgres://user:password@db:5432/workorder_db
     depends_on:
       - db
     networks:
